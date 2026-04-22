@@ -1,0 +1,11 @@
+{
+  "name": "Visionary AI - Face Analysis",
+  "description": "An advanced AI-powered facial analysis platform providing face detection, emotion recognition, verification, and history tracking.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "AI Vision",
+    "Account Systems"
+  ]
+}
