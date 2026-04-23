@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { db, auth } from '../lib/firebase';
-import { collection, query, where, getCountFromServer } from 'firebase/firestore';
 import { motion } from 'motion/react';
 import { Shield, Zap, Target, Activity, ArrowUpRight } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { db, auth } from '../lib/firebase';
+import { collection, query, where, getCountFromServer } from 'firebase/firestore';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ totalAnalyses: 0, accuracy: '99.8%' });
@@ -62,7 +62,7 @@ export default function Dashboard() {
           <Zap className="absolute top-[-20%] right-[-10%] w-64 h-64 text-orange-500/5 rotate-12 transition-transform group-hover:scale-110" />
           <h3 className="text-2xl font-bold mb-4 relative z-10">Advanced Neural Engine</h3>
           <p className="text-zinc-400 font-light leading-relaxed mb-8 relative z-10 max-w-md">
-            Our specialized vision models can detect micro-expressions, estimate age within a 2-year margin, and recognize geometric facial patterns for 1:1 identity verification.
+            Our specialized vision models can detect micro-expressions, provide constructive sentiment suggestions, and recognize geometric facial patterns for 1:1 identity verification.
           </p>
           <button className="flex items-center gap-2 text-orange-500 font-bold hover:gap-4 transition-all relative z-10">
             Learn about Vision 3.0 <ArrowUpRight className="w-4 h-4" />

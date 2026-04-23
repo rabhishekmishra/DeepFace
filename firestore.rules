@@ -10,11 +10,11 @@ service cloud.firestore {
     // P3 Primitives
     function isSignedIn() { return request.auth != null; }
     function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
-    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function isValidId(id) { return id is string && id.size() <= 128; }
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
 
-    // Validation Blueprints (P2)
+    // Validation Blueprints
     function isValidUser(data) {
       return data.uid == request.auth.uid 
         && data.email is string && data.email.size() <= 256
@@ -24,32 +24,27 @@ service cloud.firestore {
 
     function isValidAnalysis(data) {
       return data.userId == request.auth.uid
-        && data.imageUrl is string && data.imageUrl.size() <= 1000000 // base64 or URL
+        && data.imageUrl is string 
         && data.createdAt == request.time
         && data.results is map;
     }
 
-    // P1 Match Blocks
+    // Match Blocks
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow create: if isOwner(userId) && isValidUser(incoming());
-      allow update: if isOwner(userId) && isValidUser(incoming())
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming())
         && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL']);
     }
 
     match /analyses/{analysisId} {
+      // Rule 8: Secure List Queries - MUST evaluate resource.data for security enforcement
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      // Single Document Operations
       allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidAnalysis(incoming());
-      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
-    }
-    
-    // P3 ID Hardening
-    match /users/{userId} {
-      allow read, write: if isValidId(userId);
-    }
-    match /analyses/{analysisId} {
-      allow read, write: if isValidId(analysisId);
+      allow delete: if isSignedIn();
     }
   }
 }

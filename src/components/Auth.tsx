@@ -1,4 +1,4 @@
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, browserPopupRedirectResolver } from "firebase/auth";
 import { auth, googleProvider } from "../lib/firebase";
 import { motion } from "motion/react";
 import { LogIn } from "lucide-react";
@@ -6,7 +6,8 @@ import { LogIn } from "lucide-react";
 export default function Auth() {
   const handleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      // Using explicit resolver helps with "Pending promise was never set" errors in some environments
+      await signInWithPopup(auth, googleProvider, browserPopupRedirectResolver);
     } catch (error) {
       console.error("Login failed:", error);
     }

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Camera, Users, History, Database, HelpCircle, Fingerprint } from 'lucide-react';
+import { LayoutDashboard, Camera, Users, History as HistoryIcon, Database, HelpCircle, Fingerprint } from 'lucide-react';
 import { Page } from '../App';
 import { cn } from '../lib/utils';
 import { motion } from 'motion/react';
@@ -8,7 +8,7 @@ export default function Sidebar({ activePage, onNavigate }: { activePage: Page, 
     { id: 'dashboard', icon: LayoutDashboard, label: 'Overview' },
     { id: 'analysis', icon: Camera, label: 'Face Analysis' },
     { id: 'recognition', icon: Fingerprint, label: 'Identity Search' },
-    { id: 'history', icon: History, label: 'History' },
+    { id: 'history', icon: HistoryIcon, label: 'History' },
   ];
 
   return (

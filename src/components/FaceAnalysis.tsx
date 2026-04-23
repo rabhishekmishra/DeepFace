@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Camera, Upload, RefreshCw, AlertCircle, Info, Zap, Sparkles, Video, SwitchCamera, UserCheck, ShieldCheck } from 'lucide-react';
+import { Camera, Upload, RefreshCw, AlertCircle, Info, Zap, Sparkles, Video, SwitchCamera, UserCheck, ShieldCheck, Trash2 } from 'lucide-react';
 import { analyzeFace, FaceAnalysisResult, KNOWN_INDIVIDUALS } from '../lib/gemini';
 import { db, auth } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -47,7 +47,7 @@ export default function FaceAnalysis() {
       canvas.height = video.videoHeight;
       const ctx = canvas.getContext('2d');
       ctx?.drawImage(video, 0, 0);
-      const dataUrl = canvas.toDataURL('image/jpeg');
+      const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
       setImage(dataUrl);
       stopCamera();
       
@@ -128,7 +128,7 @@ export default function FaceAnalysis() {
 
       const analysisJson = await analyzeFace(imageData, runRecognition);
       setResult(analysisJson);
-      
+
       if (auth.currentUser) {
         await addDoc(collection(db, 'analyses'), {
           userId: auth.currentUser.uid,
@@ -237,6 +237,14 @@ export default function FaceAnalysis() {
                   className="max-w-full max-h-full object-contain shadow-2xl rounded-xl"
                   alt="Source"
                 />
+                
+                <button 
+                  onClick={clear}
+                  className="absolute top-8 right-8 p-3 bg-black/60 backdrop-blur-xl rounded-2xl text-white border border-white/10 hover:bg-red-500 hover:border-red-500/50 transition-all shadow-2xl z-30 group"
+                  title="Clear Workspace Image"
+                >
+                  <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </button>
                 
                 {/* Bounding Boxes */}
                 {result?.faces.map((face, i) => {
@@ -379,12 +387,24 @@ export default function FaceAnalysis() {
                            </div>
                         )}
                         
-                        <div className="grid grid-cols-2 gap-4">
-                          <DataField label="Age" value={`${face.age} yrs`} />
-                          <DataField label="Gender" value={face.gender} />
-                          <DataField label="dominant Race" value={face.race} />
-                          <DataField label="Primary State" value={face.emotion} />
+                        <div className="grid grid-cols-1 gap-4">
+                          <DataField label="Primary Emotional State" value={face.emotion} />
                         </div>
+
+                        <div className="p-3 bg-orange-500/10 border border-orange-500/20 rounded-xl space-y-1">
+                           <p className="text-[10px] font-mono uppercase text-orange-500 tracking-wider font-bold">AI Suggestion</p>
+                           <p className="text-sm text-white font-medium italic">"{face.suggestion}"</p>
+                        </div>
+
+                        {face.troubleshooting && (
+                          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl space-y-1 flex items-start gap-2">
+                            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                            <div>
+                               <p className="text-[10px] font-mono uppercase text-red-500 tracking-wider font-bold">Scan Optimization Tip</p>
+                               <p className="text-sm text-white font-medium">{face.troubleshooting}</p>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Emotion Breakdown Gauges */}
                         {face.emotionBreakdown && (

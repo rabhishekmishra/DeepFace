@@ -41,7 +41,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* Features */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 md:px-20 pb-32 max-w-7xl mx-auto w-full relative z-10">
         {[
-          { icon: Camera, title: "Face Analysis", desc: "Extract age, gender, race, and emotional states with high precision." },
+          { icon: Camera, title: "Face Analysis", desc: "Analyze real-time emotional states and facial expressions with high precision." },
           { icon: Target, title: "Face Verification", desc: "Compare two faces to verify identity with detailed confidence scores." },
           { icon: Zap, title: "Real-time Processing", desc: "Leverage lightning-fast inference for instant results from webcam or upload." },
           { icon: Shield, title: "Secure History", desc: "Automatically track and encrypt your analysis history for future reference." }

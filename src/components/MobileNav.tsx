@@ -1,4 +1,4 @@
-import { LayoutDashboard, Camera, Users, History, Fingerprint } from 'lucide-react';
+import { LayoutDashboard, Camera, Users, History as HistoryIcon, Fingerprint } from 'lucide-react';
 import { Page } from '../App';
 import { cn } from '../lib/utils';
 
@@ -7,7 +7,7 @@ export default function MobileNav({ activePage, onNavigate }: { activePage: Page
     { id: 'dashboard', icon: LayoutDashboard, label: 'Overview' },
     { id: 'analysis', icon: Camera, label: 'Analysis' },
     { id: 'recognition', icon: Fingerprint, label: 'Search' },
-    { id: 'history', icon: History, label: 'History' },
+    { id: 'history', icon: HistoryIcon, label: 'History' },
   ];
 
   return (
